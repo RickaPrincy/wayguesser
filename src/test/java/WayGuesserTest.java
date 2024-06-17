@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 public class WayGuesserTest {
@@ -19,7 +19,7 @@ public class WayGuesserTest {
         var balancoire = new Lieu("Balancoire");
 
         var bjarni = new Marcheur("Bjarni");
-        var tana = new Carte(Set.of(
+        var tana = new Carte(new HashSet<>(Set.of(
             new Rue(marais, sekolintsika),
             new Rue(sekolintsika, hei),
             new Rue("Rue Andriatsihorana", hei, pullman),
@@ -29,9 +29,9 @@ public class WayGuesserTest {
             new Rue(balancoire, boulveardDeLEurope),
             new Rue(balancoire, esti),
             new Rue(boulveardDeLEurope, esti)
-        ));
+        )));
 
-        var result = bjarni.marcher(tana, hei, balancoire);
+        var result = bjarni.marcher(tana, hei, esti);
         result.forEach(System.out::println);
         assertEquals(1, 1);
     }
