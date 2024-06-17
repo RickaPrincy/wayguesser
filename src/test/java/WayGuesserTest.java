@@ -1,7 +1,7 @@
 import com.ricka.princy.wayguesser.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +32,7 @@ public class WayGuesserTest {
         )));
 
         var result = bjarni.marcher(tana, hei, esti);
-        result.forEach(System.out::println);
-        assertEquals(1, 1);
+        var lastRue = result.getLast();
+        assertTrue(lastRue.getLieuA().equals(esti) || lastRue.getLieuB().equals(esti));
     }
 }
