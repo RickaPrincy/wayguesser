@@ -16,7 +16,7 @@ public class WayGuesserTest {
         var hei = new Lieu("HEI");
         var esti = new Lieu("ESTI");
         var pullman = new Lieu("Pullman");
-        var boulveardDeLEurope = new Lieu("Boulveard De L'Europe");
+        var boulevardDeLEurope = new Lieu("Boulveard De L'Europe");
         var nexta = new Lieu("Nexta");
         var balancoire = new Lieu("Balancoire");
 
@@ -28,12 +28,15 @@ public class WayGuesserTest {
             new Rue(hei, balancoire),
             new Rue(pullman, nexta),
             new Rue(pullman, balancoire),
-            new Rue(balancoire, boulveardDeLEurope),
+            new Rue(balancoire, boulevardDeLEurope),
             new Rue(balancoire, esti),
-            new Rue(boulveardDeLEurope, esti)
+            new Rue(boulevardDeLEurope, esti)
         )));
 
         var trajets = bjarni.marcher(tana, hei, esti);
+
+        trajets.forEach(System.out::println);
+
         assertEquals(trajets.getLast(), esti);
         assertTrue(trajets.contains(balancoire));
     }
@@ -45,21 +48,21 @@ public class WayGuesserTest {
         var hei = new Lieu("HEI");
         var esti = new Lieu("ESTI");
         var pullman = new Lieu("Pullman");
-        var boulveardDeLEurope = new Lieu("Boulveard De L'Europe");
+        var boulevardDeLEurope = new Lieu("Boulveard De L'Europe");
         var nexta = new Lieu("Nexta");
         var balancoire = new Lieu("Balancoire");
 
         var bjarni = new Marcheur("Bjarni");
         var tana = new Carte(new HashSet<>(Set.of(
-                new Rue(marais, sekolintsika),
-                new Rue(sekolintsika, hei),
-                new Rue("Rue Andriatsihorana", hei, pullman),
-                new Rue(hei, balancoire),
-                new Rue(pullman, nexta),
-                new Rue(pullman, balancoire),
-                new Rue(balancoire, boulveardDeLEurope),
-                new Rue(balancoire, esti),
-                new Rue(boulveardDeLEurope, esti)
+            new Rue(marais, sekolintsika),
+            new Rue(sekolintsika, hei),
+            new Rue("Rue Andriatsihorana", hei, pullman),
+            new Rue(hei, balancoire),
+            new Rue(pullman, nexta),
+            new Rue(pullman, balancoire),
+            new Rue(balancoire, boulevardDeLEurope),
+            new Rue(balancoire, esti),
+            new Rue(boulevardDeLEurope, esti)
         )));
 
         var trajets = bjarni.marcher(tana, esti, marais);
