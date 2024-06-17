@@ -1,51 +1,50 @@
 package com.ricka.princy.wayguesser;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public record Marcheur(String name){
-    public List<Rue> marcher(Carte carte, Lieu depart, Lieu destination){
+    public List<Lieu> marcher(Carte carte, Lieu depart, Lieu destination){
         return marcher(carte, depart, destination, new HashSet<>());
     }
 
-    private List<Rue> marcher(Carte carte, Lieu depart, Lieu destination, Set<Rue> rueDejaVisiter){
-        var rues = getLieuRues(depart, carte, rueDejaVisiter);
-        var trajets = new ArrayList<Rue>();
+    private List<Lieu> marcher(Carte carte, Lieu depart, Lieu destination, Set<Rue> rueDejaVisiter){
+        var trajets = new ArrayList<>(Set.of(depart));
+        var ruePossibles = obtenirRuesPossibles(carte, depart, rueDejaVisiter);
 
-        if(depart.equals(destination) || rues.isEmpty()){
+        if(depart.equals(destination)){
             return trajets;
         }
 
-        while(!rues.isEmpty()){
-            var randomRue = rues.get(getRandomNumber(0, rues.size() - 1));
-            trajets.add(randomRue);
-            rueDejaVisiter.add(randomRue);
+        while(!ruePossibles.isEmpty()){
+            var randomRue = ruePossibles.get(generateRandomIndex(0, ruePossibles.size()));
+            var prochainDepart = obtenirProchainLieu(randomRue, depart);
 
-            var subTrajets = marcher(carte, getNextDestination(randomRue, depart), destination, rueDejaVisiter);
-            trajets.addAll(subTrajets);
-            if(containsLieu(trajets.getLast(), destination)){
+            rueDejaVisiter.add(randomRue);
+            trajets.addAll(marcher(carte, prochainDepart, destination, rueDejaVisiter));
+
+            if(trajets.getLast().equals(destination)){
                 return trajets;
             }
-
-            trajets.add(randomRue);
-            rues = rues.stream().filter(rue -> !rue.equals(randomRue)).toList();
+            trajets.add(depart);
+            ruePossibles.remove(randomRue);
         }
         return trajets;
     }
 
-    private static Lieu getNextDestination(Rue rue, Lieu origin){
-        return rue.getLieuA().equals(origin) ? rue.getLieuB() : rue.getLieuA();
+    private List<Rue> obtenirRuesPossibles(Carte carte, Lieu depart, Set<Rue> ruesDejaVisitees) {
+        return carte.rues()
+                .stream()
+                .filter(rue -> !ruesDejaVisitees.contains(rue) && rue.relie(depart))
+                .collect(Collectors.toList());
     }
 
-    public static boolean containsLieu(Rue rue, Lieu lieu) {
-        return rue.getLieuA().equals(lieu) || rue.getLieuB().equals(lieu);
+    static private final Random RANDOM = new Random();
+    private static int generateRandomIndex(int min, int max) {
+        return RANDOM.nextInt(max - min) + min;
     }
 
-    private static List<Rue> getLieuRues(Lieu lieu, Carte carte,Set<Rue> excludes ){
-        return carte.rues().stream().filter(rue -> !excludes.contains(rue)  && containsLieu(rue, lieu)).toList();
-    }
-
-    private static int getRandomNumber(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max - min + 1) + min;
+    private static Lieu obtenirProchainLieu(Rue rue, Lieu departActuel){
+        return rue.getLieuA().equals(departActuel) ? rue.getLieuB() : rue.getLieuA();
     }
 }
