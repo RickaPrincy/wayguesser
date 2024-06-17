@@ -17,6 +17,5 @@ jobs:
           java-distribution: 'temurin'
           maven-version: '3.9.6'
 
-      - name: test with coverage (min -> 75%)
-        # TODO: add jacoco after release
-        run: mvn -B test
+      - name: test with coverage (min -> 80%)
+        run: mvn -B clean verify

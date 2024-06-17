@@ -8,20 +8,20 @@ public record Marcheur(String name){
         return marcher(carte, depart, destination, new HashSet<>());
     }
 
-    private List<Lieu> marcher(Carte carte, Lieu depart, Lieu destination, Set<Rue> rueDejaVisiter){
+    private List<Lieu> marcher(Carte carte, Lieu depart, Lieu destination, Set<Rue> ruesDejaVisitees){
         var trajets = new ArrayList<>(Set.of(depart));
-        var ruePossibles = obtenirRuesPossibles(carte, depart, rueDejaVisiter);
+        var ruePossibles = obtenirRuesPossibles(carte, depart, ruesDejaVisitees);
 
         if(depart.equals(destination)){
             return trajets;
         }
 
         while(!ruePossibles.isEmpty()){
-            var randomRue = ruePossibles.get(generateRandomIndex(0, ruePossibles.size()));
+            var randomRue = ruePossibles.get(generateRandomIndex(ruePossibles.size()));
             var prochainDepart = obtenirProchainLieu(randomRue, depart);
 
-            rueDejaVisiter.add(randomRue);
-            trajets.addAll(marcher(carte, prochainDepart, destination, rueDejaVisiter));
+            ruesDejaVisitees.add(randomRue);
+            trajets.addAll(marcher(carte, prochainDepart, destination, ruesDejaVisitees));
 
             if(trajets.getLast().equals(destination)){
                 return trajets;
@@ -40,8 +40,8 @@ public record Marcheur(String name){
     }
 
     static private final Random RANDOM = new Random();
-    private static int generateRandomIndex(int min, int max) {
-        return RANDOM.nextInt(max - min) + min;
+    private static int generateRandomIndex(int maxIndex) {
+        return RANDOM.nextInt(maxIndex);
     }
 
     private static Lieu obtenirProchainLieu(Rue rue, Lieu departActuel){
