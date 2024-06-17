@@ -1,4 +1,4 @@
-package com.ricka.princy.wayguesser.model;
+package com.ricka.princy.wayguesser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
