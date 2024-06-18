@@ -18,8 +18,4 @@ public class Rue{
         lieuA.addRue(this);
         lieuB.addRue(this);
     }
-
-    boolean relie(Lieu lieu) {
-        return this.lieuA.equals(lieu) || this.lieuB.equals(lieu);
-    }
 }
