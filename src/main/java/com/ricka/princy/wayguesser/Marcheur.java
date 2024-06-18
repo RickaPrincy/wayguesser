@@ -4,13 +4,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public record Marcheur(String name){
-    public List<Lieu> marcher(Carte carte, Lieu depart, Lieu destination){
-        return marcher(carte, depart, destination, new HashSet<>());
+    public List<Lieu> marcher(Lieu depart, Lieu destination){
+        return marcher(depart, destination, new HashSet<>());
     }
 
-    private List<Lieu> marcher(Carte carte, Lieu depart, Lieu destination, Set<Rue> ruesDejaVisitees){
+    private List<Lieu> marcher(Lieu depart, Lieu destination, Set<Rue> ruesDejaVisitees){
         var trajets = new ArrayList<>(Set.of(depart));
-        var ruePossibles = obtenirRuesPossibles(carte, depart, ruesDejaVisitees);
+        var ruePossibles = obtenirRuesPossibles(depart, ruesDejaVisitees);
 
         if(depart.equals(destination)){
             return trajets;
@@ -21,7 +21,7 @@ public record Marcheur(String name){
             var prochainDepart = obtenirProchainLieu(randomRue, depart);
 
             ruesDejaVisitees.add(randomRue);
-            trajets.addAll(marcher(carte, prochainDepart, destination, ruesDejaVisitees));
+            trajets.addAll(marcher(prochainDepart, destination, ruesDejaVisitees));
 
             if(trajets.getLast().equals(destination)){
                 return trajets;
@@ -32,10 +32,10 @@ public record Marcheur(String name){
         return trajets;
     }
 
-    private List<Rue> obtenirRuesPossibles(Carte carte, Lieu depart, Set<Rue> ruesDejaVisitees) {
-        return carte.rues()
+    private List<Rue> obtenirRuesPossibles(Lieu depart, Set<Rue> ruesDejaVisitees) {
+        return depart.getRues()
                 .stream()
-                .filter(rue -> !ruesDejaVisitees.contains(rue) && rue.relie(depart))
+                .filter(rue -> !ruesDejaVisitees.contains(rue))
                 .collect(Collectors.toList());
     }
 

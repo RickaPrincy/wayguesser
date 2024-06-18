@@ -32,10 +32,8 @@ public class WayGuesserTest {
             new Rue(balancoire, esti),
             new Rue(boulevardDeLEurope, esti)
         )));
-
-        var trajets = bjarni.marcher(tana, hei, esti);
-
-        trajets.forEach(System.out::println);
+        
+        var trajets = bjarni.marcher(hei, esti);
 
         assertEquals(trajets.getLast(), esti);
         assertTrue(trajets.contains(balancoire));
@@ -65,7 +63,7 @@ public class WayGuesserTest {
             new Rue(boulevardDeLEurope, esti)
         )));
 
-        var trajets = bjarni.marcher(tana, esti, marais);
+        var trajets = bjarni.marcher(esti, marais);
         assertEquals(trajets.getLast(), marais);
         assertTrue(trajets.containsAll(List.of(balancoire, hei, sekolintsika, marais)));
     }
